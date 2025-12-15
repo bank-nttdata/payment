@@ -16,45 +16,6 @@ import reactor.kafka.sender.SenderResult;
 import java.util.Date;
 import java.util.UUID;
 
-//@Service
-//public class KafkaServiceImpl implements KafkaService {
-//
-//    private final KafkaSender<String, EventKafka<?>> kafkaSender;
-//
-//    @Value("${topic.payment.name}")
-//    private String topicPayment;
-//
-//    public KafkaServiceImpl(KafkaSender<String, EventKafka<?>> kafkaSender) {
-//        this.kafkaSender = kafkaSender;
-//    }
-//
-//    @Override
-//    public Mono<Void> publish(Payment payment) {
-//
-//        PaymentCreatedEventKafka created = new PaymentCreatedEventKafka();
-//        created.setId(UUID.randomUUID().toString());
-//        created.setType(EventType.CREATED);
-//        created.setDate(new Date());
-//        created.setData(payment);
-//
-//        SenderRecord<String, EventKafka<?>, Void> record =
-//                SenderRecord.create(topicPayment, null, null, created.getId(), created, null);
-//
-//        return kafkaSender.send(Mono.just(record))
-//                .map(SenderResult::recordMetadata)
-//                .doOnNext(metadata ->
-//                        System.out.println("Mensaje enviado a Kafka -> Topic: " +
-//                                metadata.topic() +
-//                                " | Partition: " + metadata.partition() +
-//                                " | Offset: " + metadata.offset())
-//                )
-//                .doOnError(e ->
-//                        System.err.println("ERROR enviando mensaje Kafka: " + e.getMessage())
-//                )
-//                .then();
-//    }
-//}
-
 @Service
 public class KafkaServiceImpl implements KafkaService {
 
