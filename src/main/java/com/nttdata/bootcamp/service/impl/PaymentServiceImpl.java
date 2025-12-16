@@ -62,24 +62,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     }
 
-
-//    @Override
-//    public Mono<Payment> updatePayment(Payment dataPayment) {
-//
-//        return findByNumber(dataPayment.getPaymentNumber())
-//                .switchIfEmpty(
-//                        Mono.error(new Error(
-//                                "The payment " + dataPayment.getPaymentNumber() + " does not exist"))
-//                )
-//                .flatMap(existing -> {
-//                    dataPayment.setDni(existing.getDni());
-//                    dataPayment.setAmount(existing.getAmount());
-//                    dataPayment.setCreationDate(existing.getCreationDate());
-//                    return paymentRepository.save(dataPayment);
-//                });
-//    }
-
-    //VERIFICAR POR QUE NO ACTUALIZA
     @Override
     public Mono<Payment> updatePayment(Payment dataPayment) {
 
@@ -89,18 +71,9 @@ public class PaymentServiceImpl implements PaymentService {
                                 "The payment " + dataPayment.getPaymentNumber() + " does not exist"))
                 )
                 .flatMap(existing -> {
-
-                    // Campos que NO deben cambiar
                     dataPayment.setCreationDate(existing.getCreationDate());
-
-                    // Si NO quieres permitir actualizar dni o amount,
-                    // conserva existing; si sí quieres actualizar, NO lo sobrescribas.
-                    // EJEMPLO: permitimos actualizar dni y amount:
-                    // (entonces NO copiamos existing)
                     dataPayment.setDni(existing.getDni());
                     dataPayment.setAmount(existing.getAmount());
-
-                    // Campo obligatorio del update:
                     dataPayment.setModificationDate(new Date());
 
                     return paymentRepository.save(dataPayment)

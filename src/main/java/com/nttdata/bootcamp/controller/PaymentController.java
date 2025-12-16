@@ -216,7 +216,8 @@ public class PaymentController {
     public Flux<Payment> findAllPaymentsByAccountNumber(@PathVariable String accountNumber) {
 
         return paymentService.findByAccountNumber(accountNumber)
-                .doOnSubscribe(s -> LOGGER.info("Searching payments for account {}", accountNumber))
+                .doOnSubscribe(s ->
+                        LOGGER.info("Searching payments for account {}", accountNumber))
                 .doOnNext(p -> LOGGER.info("Payment found: {}", p));
     }
 
@@ -246,9 +247,7 @@ public class PaymentController {
         payment.setCommission(0.00);
         payment.setCreationDate(new Date());
         payment.setModificationDate(new Date());
-
         LOGGER.info("Saving payment: {}", payment);
-
         return paymentService.savePayment(payment)
                 .doOnSuccess(p -> LOGGER.info("Payment saved: {}", p));
     }
@@ -264,7 +263,6 @@ public class PaymentController {
 
         dataPayment.setPaymentNumber(numberTransaction);
         dataPayment.setModificationDate(new Date());
-
         LOGGER.info("Updating payment: {}", dataPayment);
 
         return paymentService.updatePayment(dataPayment)
@@ -286,7 +284,7 @@ public class PaymentController {
     //   FALLBACKS
     // ===============================
 
-    // 1️⃣ FALLBACK PARA FIND BY NUMBER
+    // FALLBACK PARA FIND BY NUMBER
     private Mono<Payment> fallBackPayment(String numberPayment, Throwable ex) {
         LOGGER.error("Fallback FIND triggered for {}, error={}", numberPayment, ex.toString());
 
@@ -299,7 +297,7 @@ public class PaymentController {
         return Mono.just(fallback);
     }
 
-    // 2️⃣ FALLBACK PARA SAVE PAYMENT
+    // FALLBACK PARA SAVE PAYMENT
     private Mono<Payment> fallBackPayment(PaymentDto dto, Throwable ex) {
         LOGGER.error("Fallback SAVE triggered, dto={}, error={}", dto, ex.toString());
 
@@ -314,7 +312,7 @@ public class PaymentController {
         return Mono.just(fallback);
     }
 
-    // 3️⃣ FALLBACK PARA UPDATE PAYMENT
+    // FALLBACK PARA UPDATE PAYMENT
     private Mono<Payment> fallBackPayment(String numberTransaction, Payment dataPayment, Throwable ex) {
         LOGGER.error("Fallback UPDATE triggered for {}, error={}", numberTransaction, ex.toString());
 
@@ -329,7 +327,7 @@ public class PaymentController {
         return Mono.just(fallback);
     }
 
-    // 4️⃣ FALLBACK PARA DELETE
+    // FALLBACK PARA DELETE
     private Mono<Void> fallBackVoid(String param, Throwable e) {
         LOGGER.error("Fallback VOID triggered for param: {}, error: {}", param, e.getMessage());
         return Mono.empty();
